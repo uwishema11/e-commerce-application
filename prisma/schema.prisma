@@ -14,8 +14,19 @@ datasource db {
 }
 
 
+enum Role {
+  user
+  admin
+  superadmin
+}
+
 model User {
   id    Int    @id @default(autoincrement())
   email String @unique
-  name  String?
+  FirstName  String
+  LastName String
+  password String
+  role Role
+  created_at DateTime
+  updated_at DateTime
 }
