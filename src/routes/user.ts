@@ -1,6 +1,6 @@
 import express from "express";
 import { celebrate } from "celebrate";
-import { registerUser, verifyUser } from "../controllers/user";
+import { registerUser, verifyUser, login } from "../controllers/user";
 import { userSchema } from "../validations/user";
 
 const userRouter = express.Router();
@@ -10,6 +10,7 @@ userRouter.post(
   celebrate({ body: userSchema }),
   registerUser
 );
+userRouter.post("/auth/login", login);
 userRouter.post("/auth/verify/:token", verifyUser);
 
 export default userRouter;

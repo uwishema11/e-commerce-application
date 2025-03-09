@@ -111,3 +111,51 @@ export const verifyUser = async (
     return;
   }
 };
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({
+        success: false,
+        message: "Please provide email and password",
+      });
+      return;
+    }
+
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      res.status(401).json({
+        success: false,
+        message:
+          "Invalid email or password. Please try again with the correct credentials.",
+      });
+      return;
+    }
+
+    const matchedPassword = await bcrypt.compare(password, user.password);
+    if (!matchedPassword) {
+      res.status(401).json({
+        success: false,
+        message:
+          "Invalid email or password. Please try again with the correct credentials.",
+      });
+      return;
+    }
+    const token = await generateAccessToken(user);
+    res.status(200).json({
+      success: true,
+      message: "User logged in successfully",
+      data: {
+        token,
+      },
+    });
+  } catch (error: unknown) {
+    res.status(500).json({
+      error: (error as Error).message,
+    });
+    return;
+  }
+};
