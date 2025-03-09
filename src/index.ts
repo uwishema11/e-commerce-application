@@ -1,5 +1,5 @@
-import app from "./app.js";
-import { prisma } from "./database/prismaClient.js";
+import app from "./app";
+import { prisma } from "./database/prismaClient";
 // import { prisma } from "./src/database/prismaClient.js";
 const PORT = 3000;
 
