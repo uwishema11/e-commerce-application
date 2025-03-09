@@ -23,10 +23,13 @@ enum Role {
 model User {
   id    Int    @id @default(autoincrement())
   email String @unique
-  FirstName  String
-  LastName String
+  firstName String
+  lastName String
   password String
+  confirm_password String
   role Role
+  isVerified  Boolean @default(false)
+  status String @default("disactive")
   created_at DateTime
   updated_at DateTime
 }
