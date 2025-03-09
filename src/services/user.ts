@@ -3,16 +3,16 @@ import { userType } from "../types/user";
 
 export const addUser = async (newUser: userType) => {
   const registeredUser = await prisma.user.create({
-    data: newUser
-      // email: newUser.email,
-      // firstName: newUser.firstName, 
-      // lastName: newUser.lastName, 
-      // password: newUser.password,
-      // confirm_password: newUser.confirm_password,
-      // role: newUser.role,
-      // created_at: new Date(), 
-      // updated_at: new Date(), 
-    
+    data: {
+      email: newUser.email,
+      firstName: newUser.firstName, 
+      lastName: newUser.lastName, 
+      password: newUser.password,
+      confirm_password: newUser.confirm_password,
+      role: newUser.role,
+      created_at: new Date(), 
+      updated_at: new Date(), 
+    },
   });
   return registeredUser;
 };

@@ -37,21 +37,20 @@ export const registerUser = async (
     };
 
     const token = await generateAccessToken(body);
-    const verificationLink = `http://localhost:3000/auth/verify/${token}`;
+    const verificationLink = `${process.env.BASE_URL}/auth/verify/${token}`;
     await sendVerificationEmail(
       body.email,
       sendEmailOnRegistration(req.body.firstName, verificationLink)
     );
 
     const newUser = await addUser(body);
+
     newUser.password = "";
     newUser.confirm_password = "";
-
     res.status(201).json({
       success: true,
       message:
         "User registered successfully. Please check your email to verify your account.",
-      token,
       data: newUser,
     });
     return;
@@ -82,10 +81,7 @@ export const verifyUser = async (
     if (!payload) {
       res.status(400).json({
         success: false,
-        message:
-          "This account is not available!contact the admin for further support",
       });
-      return;
     }
 
     if (!user.success) {
