@@ -2,6 +2,7 @@ import express from "express";
 import { celebrate } from "celebrate";
 import { registerUser, verifyUser, login } from "../controllers/user";
 import { userSchema } from "../validations/user";
+import { protect } from "../middleware/verifyAuth";
 
 const userRouter = express.Router();
 

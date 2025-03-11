@@ -159,3 +159,22 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 };
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  
+  try {
+    res.cookie("jwt", "Loggedout", {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "loggedout successfully",
+    });
+  } catch (error: unknown) {
+    res.status(500).json({
+      error: (error as Error).message,
+    });
+    return;
+  }
+};
