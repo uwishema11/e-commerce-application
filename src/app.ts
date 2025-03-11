@@ -5,6 +5,7 @@ import morgan from "morgan";
 
 import userRouter from "./routes/user";
 import productRouter from "./routes/products";
+import orderRouter from "./routes/orders";
 import cartRouter from "./routes/cart";
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(morgan("dev"));
 
 app.use("/users", userRouter);
 app.use("/products", productRouter);
+app.use("/orders", orderRouter);
 app.use("/cart", cartRouter);
 
 app.use(errors());

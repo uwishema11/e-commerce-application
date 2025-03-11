@@ -22,9 +22,7 @@ export const getCart = async (userId: number) => {
   if (!cart) {
     await createCart(userId);
     cart = JSON.stringify([]);
-  } else {
-    console.log(`Cart for user ${userId} fetched successfully.`);
-  }
+  } 
   return JSON.parse(cart);
 };
 
@@ -33,7 +31,7 @@ export const addToCart = async (userId: number, items: cartType) => {
 
   let isInCart = false;
   productList.forEach((product: cartType) => {
-    if (product.productId === items.productId) {
+    if (product.product_id === items.product_id) {
       isInCart = true;
       product.quantity += items.quantity;
       product.Total_price += items.Total_price;
@@ -50,7 +48,7 @@ export const addToCart = async (userId: number, items: cartType) => {
 export const removeFromCart = async (userId: number, productId: number) => {
   const productList = await getCart(userId);
   const newCart = productList.filter(
-    (item: cartType) => item.productId !== productId
+    (item: cartType) => item.product_id !== productId
   );
 
   await redis.set(`client:${userId}`, JSON.stringify(newCart));
@@ -69,7 +67,7 @@ export const updateCartItem = async (
 
   let updatedProductList = productList
     .map((product: cartType) => {
-      if (product.productId === productId) {
+      if (product.product_id === productId) {
         const pricePerUnit = product.Total_price / product.quantity;
         if (quantityToUpdate > 0) {
           product.quantity += quantityToUpdate;
