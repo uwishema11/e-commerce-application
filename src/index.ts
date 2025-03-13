@@ -1,5 +1,6 @@
 import app from "./app";
 import { prisma } from "./database/prismaClient";
+import "./config/redis";
 // import { prisma } from "./src/database/prismaClient.js";
 const PORT = 3000;
 

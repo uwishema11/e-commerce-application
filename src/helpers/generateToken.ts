@@ -1,4 +1,3 @@
-import { $Enums } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { tokenData } from "../types/user";
 import dotenv from "dotenv";
@@ -28,4 +27,3 @@ export const verifyAccessToken = (token: string) => {
     return { success: false, error: (error as Error).message };
   }
 };
-
