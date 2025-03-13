@@ -1,21 +1,17 @@
+import { orderStatus } from "@prisma/client";
+
 export interface cartType {
   name: string;
-  productId: number;
+  product_id: number;
   quantity: number;
   Total_price: number;
   status: string;
 }
 
 export interface orderType {
-  orderId: number;
-  name: string;
-  userId: number;
-  productId: number;
-  quantity: number;
-  price: number;
-  status: string;
-  created_at: Date;
-  updated_at: Date;
+  order_id: number;
+  user_id: number;
+  status: orderStatus;
 }
 
 export interface updatecartType {

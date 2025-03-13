@@ -18,7 +18,11 @@ export const addProduct = async (newProduct: productType) => {
 };
 
 export const findAllProducts = async () => {
-  const products = await prisma.product.findMany();
+  const products = await prisma.product.findMany({
+    where: {
+      status: "available",
+    },
+  });
   return products;
 };
 

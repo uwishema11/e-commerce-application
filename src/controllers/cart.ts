@@ -46,7 +46,7 @@ export const addProductToCart = async (
     }
 
     const order_item = {
-      productId: Number(productId),
+      product_id: Number(productId),
       name: product?.name ?? "",
       quantity: req.body.quantity,
       Total_price: (product?.price ?? 0) * req.body.quantity,

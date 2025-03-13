@@ -21,6 +21,14 @@ export const createProduct = async (
   res: Response
 ): Promise<void> => {
   try {
+    const { total_quantity } = req.body;
+    if (total_quantity <= 0) {
+      res.status(400).json({
+        success: false,
+        message: "Total quantity must be greater than 0",
+      });
+      return;
+    }
     const result = {
       ...req.body,
       userId: req.user?.id,

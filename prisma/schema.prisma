@@ -19,6 +19,11 @@ enum Role {
   admin
   superadmin
 }
+enum orderStatus {
+  pending
+  shipped
+  delivered
+}
 
 model User {
   id    Int    @id @default(autoincrement())
@@ -30,9 +35,10 @@ model User {
   role Role
   isVerified  Boolean @default(false)
   status String @default("disactive")
-  created_at DateTime
-  updated_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
   products Product[]
+  orders Order[]
 }
 
 
@@ -41,9 +47,33 @@ model Product {
   name String
   description String
   price Float
+  stock_quantity Int     @default(0)
   status String @default("available")
   user_id Int
   user User @relation(fields: [user_id], references: [id])
-  created_at DateTime
-  updated_at DateTime
+  orderItems OrderItem[]
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Order {
+  order_id    Int    @id @default(autoincrement())
+  user_id Int
+  user User @relation(fields: [user_id], references: [id])
+  status orderStatus @default(pending)
+  order_items OrderItem[]
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+
+model OrderItem {
+  order_item_id    Int    @id @default(autoincrement())
+  order_id Int
+  order Order @relation(fields: [order_id], references: [order_id], onDelete: Cascade)
+  product_id Int
+  product Product @relation(fields: [product_id], references: [product_id])
+  quantity Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }
