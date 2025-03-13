@@ -29,8 +29,9 @@ export const createProduct = async (
     res.status(200).json({ success: true, data: response });
     return;
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal Server Error";
+    res.status(500).json({ success: false, message: errorMessage });
   }
   return;
 };
@@ -44,7 +45,6 @@ export const getProducts = async (
     res.status(200).json({ success: true, data: products });
     return;
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
   return;
@@ -65,8 +65,9 @@ export const getProductById = async (
     res.status(200).json({ success: true, data: product });
     return;
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal Server Error";
+    res.status(500).json({ success: false, message: errorMessage });
   }
   return;
 };
@@ -94,8 +95,9 @@ export const updateProductById = async (
     res.status(200).json({ success: true, data: response });
     return;
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal Server Error";
+    res.status(500).json({ success: false, message: errorMessage });
   }
 };
 
@@ -114,8 +116,9 @@ export const deleteProductById = async (
     res.status(200).json({ success: true, data: response });
     return;
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal Server Error";
+    res.status(500).json({ success: false, message: errorMessage });
   }
   return;
 };

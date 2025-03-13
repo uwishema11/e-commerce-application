@@ -39,11 +39,11 @@ const protectedRoute = async (
     }
 
     const user = verifyAccessToken(token);
-    console.log(user);
     if (!user.success) {
-      res
-        .status(401)
-        .json({ success: false, message: " your session as expired, Please login again to proceed" });
+      res.status(401).json({
+        success: false,
+        message: " your session as expired, Please login again to proceed",
+      });
       return;
     }
 
@@ -61,8 +61,8 @@ const protectedRoute = async (
     req.user = isUserExist;
     next();
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    const errorMessage = (error instanceof Error) ? error.message : "Internal Server Error";
+    res.status(500).json({ success: false, message: errorMessage });
   }
   return;
 };
