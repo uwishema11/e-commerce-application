@@ -7,6 +7,7 @@ import userRouter from "./routes/user";
 import productRouter from "./routes/products";
 import orderRouter from "./routes/orders";
 import cartRouter from "./routes/cart";
+import checkoutRouter from './routes/checkout'
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use("/users", userRouter);
 app.use("/products", productRouter);
 app.use("/orders", orderRouter);
 app.use("/cart", cartRouter);
+app.use("/checkout", checkoutRouter);
 
 app.use(errors());
 

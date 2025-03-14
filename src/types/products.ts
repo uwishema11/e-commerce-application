@@ -1,9 +1,9 @@
-
 export interface productType {
-  id: number;
+  id: string;
   name: string;
-  userId?: number;
+  userId?: string;
   price: number;
+  stock_quantity: string;
   description: string;
   created_at: Date;
   updated_at: Date;

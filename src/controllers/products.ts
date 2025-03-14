@@ -10,7 +10,7 @@ import {
 
 interface AuthenticatedRequest extends Request {
   user?: {
-    id: number;
+    id: string;
     email: string;
     role: string;
   };
@@ -64,12 +64,12 @@ export const getProductById = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const isProductExist = await findProductById(Number(id));
+    const isProductExist = await findProductById(id);
     if (!isProductExist) {
       res.status(404).json({ success: false, message: "Product not found" });
       return;
     }
-    const product = await findProductById(Number(id));
+    const product = await findProductById(id);
     res.status(200).json({ success: true, data: product });
     return;
   } catch (error) {
@@ -94,12 +94,12 @@ export const updateProductById = async (
       ...req.body,
       user_id: req.user?.id,
     };
-    const isProductExist = await findProductById(Number(id));
+    const isProductExist = await findProductById(id);
     if (!isProductExist) {
       res.status(404).json({ success: false, message: "Product not found" });
       return;
     }
-    const response = await updateProduct(Number(id), result);
+    const response = await updateProduct(id, result);
     res.status(200).json({ success: true, data: response });
     return;
   } catch (error) {
@@ -115,12 +115,12 @@ export const deleteProductById = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const isProductExist = await findProductById(Number(id));
+    const isProductExist = await findProductById(id);
     if (!isProductExist) {
       res.status(404).json({ success: false, message: "Product not found" });
       return;
     }
-    const response = await deleteProduct(Number(id));
+    const response = await deleteProduct(id);
     res.status(200).json({ success: true, data: response });
     return;
   } catch (error) {

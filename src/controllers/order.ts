@@ -6,48 +6,15 @@ import {
   getOrderById,
   getOrders,
 } from "../services/order";
-import { getCart } from "../services/cart";
+
 
 interface AuthenticatedRequest extends Request {
   user?: {
-    id: number;
+    id: string;
     email: string;
     role: string;
   };
 }
-export const createOrderController = async (
-  req: AuthenticatedRequest,
-  res: Response
-): Promise<void> => {
-  try {
-    const userId = req.user?.id;
-    const cart = await getCart(Number(userId));
-
-    if (!cart || cart.length === 0) {
-      res
-        .status(400)
-        .json({ message: "Cart is empty! Add something in cart to proceed" });
-      return;
-    }
-
-    const formattedOrderItems = cart.map((item: any) => ({
-      product_id: item.product_id,
-      quantity: item.quantity,
-    }));
-    const orderData = {
-      user_id: userId,
-      order_items: formattedOrderItems,
-    };
-
-    const response = await createOrder(orderData);
-
-    res.status(201).json({ success: true, data: response });
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Internal Server Error";
-    res.status(500).json({ success: false, message: errorMessage });
-  }
-};
 
 export const updateOrderController = async (
   req: AuthenticatedRequest,
@@ -56,7 +23,7 @@ export const updateOrderController = async (
   try {
     const { id } = req.params;
 
-    const isOrderExist = await getOrderById(Number(id));
+    const isOrderExist = await getOrderById(id);
     if (!isOrderExist) {
       res.status(404).json({
         success: false,
@@ -69,7 +36,7 @@ export const updateOrderController = async (
       ...req.body,
       user_id: req.user?.id,
     };
-    const response = await updateOrder(Number(id), result);
+    const response = await updateOrder(id, result);
     res.status(200).json({ success: true, data: response });
     return;
   } catch (error) {
@@ -86,12 +53,12 @@ export const deleteOrderController = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const isOrderExist = await getOrderById(Number(id));
+    const isOrderExist = await getOrderById(id);
     if (!isOrderExist) {
       res.status(404).json({ success: false, message: "Order not found" });
       return;
     }
-    const response = await deleteOrder(Number(id));
+    const response = await deleteOrder(id);
     res.status(200).json({
       success: true,
       message: "order deleted successfully",
@@ -125,12 +92,12 @@ export const getOrderByIdController = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const isOrderExist = await getOrderById(Number(id));
+    const isOrderExist = await getOrderById(id);
     if (!isOrderExist) {
       res.status(404).json({ success: false, message: "Order not found" });
       return;
     }
-    const order = await getOrderById(Number(id));
+    const order = await getOrderById(id);
     res.status(200).json({ success: true, data: order });
     return;
   } catch (error) {

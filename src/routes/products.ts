@@ -1,12 +1,16 @@
 import express from "express";
+import { celebrate } from "celebrate";
+
 import * as productController from "../controllers/products";
 import protectedRoute from "../middleware/verifyAuth";
 import verifyAdmin from "../middleware/verifyAdmin";
+import { productSchema } from "../validations/product";
 
 const productRouter = express.Router();
 
 productRouter.post(
   "/create",
+  celebrate({ body: productSchema }),
   protectedRoute,
   verifyAdmin,
   productController.createProduct

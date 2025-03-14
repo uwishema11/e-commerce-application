@@ -12,21 +12,21 @@ const testRedisConnection = async () => {
 
 testRedisConnection();
 
-const createCart = async (userId: number) => {
+const createCart = async (userId: string) => {
   await redis.set(`client:${userId}`, JSON.stringify([]));
   return [];
 };
 
-export const getCart = async (userId: number) => {
+export const getCart = async (userId: string) => {
   let cart = await redis.get(`client:${userId}`);
   if (!cart) {
     await createCart(userId);
     cart = JSON.stringify([]);
-  } 
+  }
   return JSON.parse(cart);
 };
 
-export const addToCart = async (userId: number, items: cartType) => {
+export const addToCart = async (userId: string, items: cartType) => {
   const productList = await getCart(userId);
 
   let isInCart = false;
@@ -45,7 +45,7 @@ export const addToCart = async (userId: number, items: cartType) => {
   return productList;
 };
 
-export const removeFromCart = async (userId: number, productId: number) => {
+export const removeFromCart = async (userId: string, productId: string) => {
   const productList = await getCart(userId);
   const newCart = productList.filter(
     (item: cartType) => item.product_id !== productId
@@ -55,8 +55,8 @@ export const removeFromCart = async (userId: number, productId: number) => {
 };
 
 export const updateCartItem = async (
-  userId: number,
-  productId: number,
+  userId: string,
+  productId: string,
   quantityToUpdate: number
 ) => {
   const productList = await getCart(userId);
@@ -89,17 +89,17 @@ export const updateCartItem = async (
   return updatedProductList;
 };
 
-export const clearCart = async (userId: number) => {
+export const clearCart = async (userId: string) => {
   await redis.set(`client:${userId}`, JSON.stringify([]));
 };
 
-export const checkout = async (userId: number) => {
+export const checkout = async (userId: string) => {
   const cart = await getCart(userId);
   await clearCart(userId);
   return cart;
 };
 
-export const getTotalCartPrice = async (userId: number) => {
+export const getTotalCartPrice = async (userId: string) => {
   const productList = await getCart(userId);
   const totalPrice = productList.reduce(
     (total: number, product: cartType) => total + product.Total_price,

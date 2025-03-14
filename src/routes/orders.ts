@@ -1,7 +1,6 @@
 import express from "express";
-import { celebrate } from "celebrate";
+
 import {
-  createOrderController,
   updateOrderController,
   deleteOrderController,
   getOrderByIdController,
@@ -13,10 +12,19 @@ import verifyAdmin from "../middleware/verifyAdmin";
 
 const orderRouter = express.Router();
 
-orderRouter.post("/create", protectedRoute, createOrderController);
-orderRouter.patch("/edit/:id", protectedRoute, verifyAdmin, updateOrderController);
+orderRouter.patch(
+  "/edit/:id",
+  protectedRoute,
+  verifyAdmin,
+  updateOrderController
+);
 orderRouter.get("/", protectedRoute, verifyAdmin, getOrdersController);
-orderRouter.get("/:id", protectedRoute, verifyAdmin,getOrderByIdController);
-orderRouter.delete("/delete/:id", protectedRoute, verifyAdmin, deleteOrderController);
+orderRouter.get("/:id", protectedRoute, verifyAdmin, getOrderByIdController);
+orderRouter.delete(
+  "/delete/:id",
+  protectedRoute,
+  verifyAdmin,
+  deleteOrderController
+);
 
 export default orderRouter;

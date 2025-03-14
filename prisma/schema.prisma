@@ -24,9 +24,19 @@ enum orderStatus {
   shipped
   delivered
 }
+enum paymentStatus {
+  pending
+  failed
+  completed
+}
+
+enum productStatus {
+  available
+  out_of_stock
+}
 
 model User {
-  id    Int    @id @default(autoincrement())
+  id    String    @id @default(uuid())
   email String @unique
   firstName String
   lastName String
@@ -39,17 +49,18 @@ model User {
   updated_at DateTime @default(now())
   products Product[]
   orders Order[]
+  payments Payment[]
 }
 
 
 model Product {
-  product_id    Int    @id @default(autoincrement())
+  product_id    String    @id @default(uuid())
   name String
   description String
   price Float
-  stock_quantity Int     @default(0)
-  status String @default("available")
-  user_id Int
+  stock_quantity String
+  status productStatus @default(available)
+  user_id String
   user User @relation(fields: [user_id], references: [id])
   orderItems OrderItem[]
   created_at DateTime @default(now())
@@ -57,23 +68,39 @@ model Product {
 }
 
 model Order {
-  order_id    Int    @id @default(autoincrement())
-  user_id Int
+  order_id    String    @id @default(uuid())
+  user_id String
   user User @relation(fields: [user_id], references: [id])
   status orderStatus @default(pending)
   order_items OrderItem[]
+  total_amount Float @default(0)
+  payments Payment[]
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
 
 
 model OrderItem {
-  order_item_id    Int    @id @default(autoincrement())
-  order_id Int
+  order_item_id    String    @id @default(uuid())
+  order_id String @unique
   order Order @relation(fields: [order_id], references: [order_id], onDelete: Cascade)
-  product_id Int
+  product_id String
   product Product @relation(fields: [product_id], references: [product_id])
   quantity Int
+  total_price Float 
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Payment {
+  payment_id   String    @id @default(uuid())
+  order_id String @unique
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+  order Order @relation(fields: [order_id], references: [order_id], onDelete: Cascade)
+  payment_method String
+  payment_status paymentStatus @default(pending)
+  amount Float @default(0)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
