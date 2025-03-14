@@ -4,7 +4,7 @@ import { findUserByEmail } from "../services/user";
 
 interface AuthenticatedRequest extends Request {
   user?: {
-    id: number;
+    id: string;
     email: string;
     role: string;
   };

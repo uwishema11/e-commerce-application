@@ -12,7 +12,7 @@ import { findProductById } from "../services/products";
 
 interface AuthenticatedRequest extends Request {
   user?: {
-    id: number;
+    id: string;
     email: string;
     role: string;
   };
@@ -34,8 +34,12 @@ export const addProductToCart = async (
       });
       return;
     }
-    const product = await findProductById(Number(productId));
-    if (product?.status === "out-of-stock") {
+    const product = await findProductById(productId);
+    if (!product) {
+      res.status(404).json({ message: "Product not found!" });
+      return;
+    }
+    if (product?.status === "out_of_stock") {
       res.status(400).json({ message: "This product is out of stock" });
       return;
     }
@@ -46,11 +50,11 @@ export const addProductToCart = async (
     }
 
     const order_item = {
-      product_id: Number(productId),
-      name: product?.name ?? "",
+      product_id: productId,
+      name: product.name,
       quantity: req.body.quantity,
-      Total_price: (product?.price ?? 0) * req.body.quantity,
-      status: product?.status ?? "",
+      Total_price: product.price * req.body.quantity,
+      status: product.status,
     };
     const cart = await addToCart(userId, order_item);
     res.status(201).json({
@@ -79,7 +83,7 @@ export const viewCart = async (
         .json({ message: "Your session have expired please login again" });
       return;
     }
-    const allProducts = await getCart(Number(userId));
+    const allProducts = await getCart(userId);
     res.status(200).json({
       success: true,
       data: allProducts,
@@ -102,7 +106,7 @@ export const removeProductsFromCart = async (
       res.status(400).json({ message: "Invalid user or product ID" });
       return;
     }
-    await removeFromCart(userId, Number(product_id));
+    await removeFromCart(userId, product_id);
     res.status(200).json({
       success: true,
       message: "Product removed from cart",
@@ -115,15 +119,11 @@ export const updateCartItems = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.id as string;
     const quantity = req.body.quantity;
     const product_id = req.body.productId;
-    const cart = await updateCartItem(
-      Number(userId),
-      Number(product_id),
-      quantity
-    );
-    const totalPrice = await getTotalCartPrice(Number(userId));
+    const cart = await updateCartItem(userId, product_id, quantity);
+    const totalPrice = await getTotalCartPrice(userId);
 
     res.status(200).json({
       success: true,
@@ -147,8 +147,8 @@ export const clearAllCartItems = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user?.id;
-    await clearCart(Number(userId));
+    const userId = req.user?.id as string;
+    await clearCart(userId);
     res.status(200).json({
       success: true,
       message: "Cart cleared successfully",

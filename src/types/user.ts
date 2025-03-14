@@ -1,7 +1,7 @@
 export type Role = "admin" | "user" | "superadmin";
 
 export interface userType {
-  id: number;
+  id: string;
   email: string;
   role: Role;
   password: string;
@@ -15,7 +15,7 @@ export interface userType {
 }
 
 export interface tokenData {
-  id: number;
+  id: string;
   email: string;
   role: string;
 }
