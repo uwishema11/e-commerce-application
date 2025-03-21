@@ -8,7 +8,6 @@ import protectedRoute from "../middleware/verifyAuth";
 
 const checkoutRouter = express.Router();
 
-// checkoutRouter.post("/:id", protectedRoute, makePayment);
 checkoutRouter.post(
   "/order-and-pay",
   protectedRoute,

@@ -9,6 +9,7 @@ import orderRouter from "./routes/orders";
 import cartRouter from "./routes/cart";
 import checkoutRouter from './routes/checkout'
 
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
